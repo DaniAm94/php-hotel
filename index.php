@@ -1,5 +1,22 @@
 <?php 
 include 'data/data.php';
+
+foreach($hotels as $hotel){
+    foreach($hotel as $key => $value){
+        if($key=== 'parking'){
+            if($value){
+                // $value= '<i class="fa-solid fa-circle-check text-success"></i>';
+                $value= 'ok';
+                echo $value;
+            } else{
+                // $value= '<i class="fa-solid fa-circle-xmark text-danger"></i>';
+                $value= 'no';
+                echo $value;
+            }
+        }
+    }
+}
+var_dump($hotels);
 ?>
 
 <!DOCTYPE html>
