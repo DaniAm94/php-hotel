@@ -14,17 +14,28 @@ include 'data/data.php';
 </head>
 <body>
     <h1>La lista degli hotel</h1>
-    <ul class="list-unstyled">
-        <?php foreach($hotels as $index => $hotel) :?>
-            <li class="mb-4"> <h4>Hotel <?= $index+1?></h4>
-                <ul>
-                <?php foreach($hotel as $key => $value):?>
-                    <li><em><?= $key?>: <strong><?= $value?></strong></em></li>
-                <?php endforeach ?>
-                </ul>
-            </li>
-            
+    <table>
+        <thead>
+            <tr>
+            <!-- Itero tra le chiavi dell'hotel per stamparle nell'header della tabella -->
+            <?php foreach($hotels[0] as $hotel_key => $hotel_value):?>
+                <th><?= ucfirst($hotel_key)?></th>
             <?php endforeach ?>
-    </ul>
+            </tr>
+            <tbody>
+                <!-- Itero la lista degli hotel -->
+                <?php foreach($hotels as $hotel):?>
+                    <!-- Creo una riga per ogni hotel -->
+                    <tr>
+                        <!-- Itero tra gli attributi dell'hotel -->
+                    <?php foreach($hotel as $attribute) :?>
+                        <!-- Stampo ogni attributo all'interno di una cella -->
+                        <td><?= $attribute?></td>            
+                    <?php endforeach?>
+                    </tr>
+                <?php endforeach ?>
+            </tbody>
+        </thead>
+    </table>
 </body>
 </html>
