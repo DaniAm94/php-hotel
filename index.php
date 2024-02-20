@@ -1,22 +1,8 @@
 <?php 
 include 'data/data.php';
 
-foreach($hotels as $hotel){
-    foreach($hotel as $key => $value){
-        if($key=== 'parking'){
-            if($value){
-                // $value= '<i class="fa-solid fa-circle-check text-success"></i>';
-                $value= 'ok';
-                echo $value;
-            } else{
-                // $value= '<i class="fa-solid fa-circle-xmark text-danger"></i>';
-                $value= 'no';
-                echo $value;
-            }
-        }
-    }
-}
-var_dump($hotels);
+$check_icon= '<i class="fa-solid fa-circle-check text-success"></i>';
+$xmark_icon= '<i class="fa-solid fa-circle-xmark text-danger"></i>';
 ?>
 
 <!DOCTYPE html>
@@ -53,10 +39,19 @@ var_dump($hotels);
                         <!-- Creo una riga per ogni hotel -->
                         <tr>
                             <!-- Itero tra gli attributi dell'hotel -->
-                            <?php foreach($hotel as $attribute) :?>
+                            <?php foreach($hotel as $key => $attribute) :?>
                                 <!-- Stampo ogni attributo all'interno di una cella -->
-                                <td class="pe-5"><?= $attribute?></td>            
-                                <?php endforeach?>
+                                <td class="pe-5">
+                                    <!-- Se la chiave e parking -->
+                                <?php if($key === 'parking') :?>
+                                    <!-- Stampo un template, predisposto, a seconda del suo valore -->
+                                <?= $attribute? $check_icon : $xmark_icon ?>
+                                <!-- Altrimenti stampo il suo valore -->
+                                <?php else :?>
+                                 <?= $attribute?>
+                                <?php endif ?>
+                                </td>            
+                            <?php endforeach?>
                         </tr>
                      <?php endforeach ?>
             </tbody>
