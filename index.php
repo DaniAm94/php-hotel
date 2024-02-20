@@ -23,13 +23,13 @@ $xmark_icon= '<i class="fa-solid fa-circle-xmark text-danger"></i>';
 <body>
     <div class="container-sm">
 
-        <h1 class="my-3">La lista degli hotel</h1>
-        <table>
+        <h1 class="my-3 text-center">La lista degli hotel</h1>
+        <table class="m-auto w-100">
             <thead>
                 <tr>
                 <!-- Itero tra le chiavi dell'hotel per stamparle nell'header della tabella -->
                 <?php foreach($hotels[0] as $hotel_key => $hotel_value):?>
-                    <th class="pe-5"><?= ucfirst($hotel_key)?></th>
+                    <th class="px-3"><?= ucfirst($hotel_key)?></th>
                     <?php endforeach ?>
                 </tr>
             </thead>
@@ -41,11 +41,11 @@ $xmark_icon= '<i class="fa-solid fa-circle-xmark text-danger"></i>';
                             <!-- Itero tra gli attributi dell'hotel -->
                             <?php foreach($hotel as $key => $attribute) :?>
                                 <!-- Stampo ogni attributo all'interno di una cella -->
-                                <td class="pe-5">
+                                <td class="px-3">
                                     <!-- Se la chiave e parking -->
                                 <?php if($key === 'parking') :?>
                                     <!-- Stampo un template, predisposto, a seconda del suo valore -->
-                                <?= $attribute? $check_icon : $xmark_icon ?>
+                                <?= $attribute ? $check_icon : $xmark_icon ?>
                                 <!-- Altrimenti stampo il suo valore -->
                                 <?php else :?>
                                  <?= $attribute?>
