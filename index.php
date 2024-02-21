@@ -1,14 +1,41 @@
 <?php 
 include 'data/data.php';
 
+$headings= array_keys($hotels[0]);
+
+
 $parking_filter = $_GET['parking_filter'] ?? '';
+if($parking_filter==='yes'){
+    $filtered_hotels=[];
+    foreach($hotels as $hotel){
+        if($hotel['parking']) $filtered_hotels[] = $hotel;
+    }
+    $hotels = $filtered_hotels;
+}elseif($parking_filter=== 'no'){
+    $filtered_hotels=[];
+    foreach($hotels as $hotel){
+        if(!$hotel['parking']) $filtered_hotels[] = $hotel;
+    }
+    $hotels = $filtered_hotels;
+}
+
+$rating= $_GET['rating'] ?? '';
+if($rating){
+    $filtered_hotels=[];
+    foreach($hotels as $hotel){
+        if($hotel['vote']>=$rating) $filtered_hotels[]= $hotel;
+    }
+    $hotels= $filtered_hotels;
+}
+
 
 $check_icon= '<i class="fa-solid fa-circle-check text-success"></i>';
 $xmark_icon= '<i class="fa-solid fa-circle-xmark text-danger"></i>';
+
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,11 +51,19 @@ $xmark_icon= '<i class="fa-solid fa-circle-xmark text-danger"></i>';
 </head>
 <body>
     <div class="container-sm">
-        <header class="d-flex justify-content-between mb-3 py-3 ">
+        <header class="row row-gap-3 ">
 
-            <h1>La lista degli hotel</h1>
-            <form action="" method="get" class="d-flex align-items-center column-gap-3">
-                <div class="radio-group d-flex column-gap-4">
+            <h1 class="col-12">La lista degli hotel</h1>
+            <form action="" method="get" class="row col-12 align-items-center ">
+                <select class="form-select w-auto col-3" name="rating">
+                    <option value='' <?= !$rating? 'selected': '' ?> >Rating...</option>
+                    <option value="1" <?= $rating==='1'? 'selected' : '' ?>>1</option>
+                    <option value="2" <?= $rating==='2'? 'selected' : '' ?>>2</option>
+                    <option value="3" <?= $rating==='3'? 'selected' : '' ?>>3</option>
+                    <option value="4" <?= $rating==='4'? 'selected' : '' ?>>4</option>
+                    <option value="5" <?= $rating==='5'? 'selected' : '' ?>>5</option>
+                </select>
+                <div class="offset-2 col-5 radio-group d-flex column-gap-4">
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="parking_filter" value="" id="flexRadioDefault1" <?= !$parking_filter ? 'checked' : '' ?>>
                         <label class="form-check-label" for="flexRadioDefault1">
@@ -48,87 +83,35 @@ $xmark_icon= '<i class="fa-solid fa-circle-xmark text-danger"></i>';
                         </label>
                     </div>
                 </div>
-            <button type="submit">Conferma</button>
+                <div class="col-2">
+                    <button class="btn btn-sm btn-primary " type="submit">Conferma</button>
+                </div>
         </form>
     </header>
+    <main class="row mt-4">
         <table class="m-auto w-100">
             <thead>
                 <tr>
-                <!-- Itero tra le chiavi dell'hotel per stamparle nell'header della tabella -->
-                <?php foreach($hotels[0] as $hotel_key => $hotel_value):?>
-                    <th class="px-3"><?= ucfirst($hotel_key)?></th>
-                <?php endforeach ?>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Itero la lista degli hotel -->
-                <?php foreach($hotels as $hotel):?>
-                    <!-- Uso un switch per controllare il valore di parking_filter -->
-                    <?php switch($parking_filter) : 
-                        // case yes ovvero prendo gli hotel con parcheggio
-                            case 'yes': ?>
-                                <?php if($hotel['parking'] === true) :?>
-                                <tr>
-                                 <!-- Itero tra gli attributi dell'hotel -->
-                                    <?php foreach($hotel as $key => $attribute) :?>
-                                        <!-- Stampo ogni attributo all'interno di una cella -->
-                                        <td class="px-3">
-                                            <!-- Se la chiave e parking -->
-                                            <?php if($key === 'parking') :?>
-                                            <!-- Stampo un template, predisposto, a seconda del suo valore -->
-                                             <?= $attribute ? $check_icon : $xmark_icon ?>
-                                             <!-- Altrimenti stampo il suo valore -->
-                                            <?php else :?>
-                                            <?= $attribute?>
-                                            <?php endif ?>
-                                        </td>            
-                                    <?php endforeach?>
-                                </tr>
-                                <?php endif ?>
-                            <?php break; ?>
-                            <!-- case no ovvero prendo gli hotel senza parcheggio -->
-                            <?php case 'no': ?>
-                                <?php if($hotel['parking'] === false) :?>
-                                <tr>
-                                    <!-- Itero tra gli attributi dell'hotel -->
-                                    <?php foreach($hotel as $key => $attribute) :?>
-                                    <!-- Stampo ogni attributo all'interno di una cella -->
-                                    <td class="px-3">
-                                        <!-- Se la chiave e parking -->
-                                        <?php if($key === 'parking') :?>
-                                        <!-- Stampo un template, predisposto, a seconda del suo valore -->
-                                        <?= $attribute ? $check_icon : $xmark_icon ?>
-                                        <!-- Altrimenti stampo il suo valore -->
-                                        <?php else :?>
-                                        <?= $attribute?>
-                                        <?php endif ; ?>
-                                    </td>            
-                                    <?php endforeach ; ?>
-                                </tr>
-                                <?php endif ; ?>
-                            <?php break; ?>
-                            <!-- caso defaul ovvero filtro su all -->
-                            <?php default: ?>
-                            <tr>
-                                <!-- Itero tra gli attributi dell'hotel -->
-                                <?php foreach($hotel as $key => $attribute) :?>
-                                <!-- Stampo ogni attributo all'interno di una cella -->
-                                <td class="px-3">
-                                    <!-- Se la chiave e parking -->
-                                    <?php if($key === 'parking') :?>
-                                    <!-- Stampo un template, predisposto, a seconda del suo valore -->
-                                    <?= $attribute ? $check_icon : $xmark_icon ?>
-                                     <!-- Altrimenti stampo il suo valore -->
-                                    <?php else :?>
-                                     <?= $attribute?>
-                                    <?php endif ?>
-                                </td>            
-                                <?php endforeach?>
-                            </tr>
-                    <?php endswitch ;?>
-                <?php endforeach ; ?>
-            </tbody>
-        </table>
+                    <!-- Itero tra le chiavi dell'hotel per stamparle nell'header della tabella -->
+                    <?php foreach($headings as $heading):?>
+                        <th class="px-3 text-black"><?= $heading==='distance_to_center'? ucfirst($heading).'(km)': ucfirst($heading)?></th>
+                        <?php endforeach ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Itero la lista degli hotel -->
+                    <?php foreach($hotels as $hotel):?>
+                        <tr>
+                            <td class="px-3"><?= $hotel['name']?></td>
+                            <td class="px-3"><?= $hotel['description']?></td>
+                            <td class="px-3"><?= $hotel['parking']? $check_icon: $xmark_icon?></td>
+                            <td class="px-3"><?= $hotel['vote']?>/5</td>
+                            <td class="px-3"><?= $hotel['distance_to_center']?></td>
+                        </tr>
+                    <?php endforeach ; ?>
+                </tbody>
+            </table>
+        </main>
     </div>
  </body>
 </html>
